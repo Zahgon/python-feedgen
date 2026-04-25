@@ -162,22 +162,4 @@ class MediaEntryExtension(BaseEntryExtension):
 
         :returns: The media thumbnail tag.
         '''
-        # Handle kwargs
-        if thumbnail is None and kwargs:
-            thumbnail = kwargs
-        # Handle new data
-        if thumbnail is not None:
-            # Reset data if we want to replace them
-            if replace or self.__media_thumbnail is None:
-                self.__media_thumbnail = []
-            # Ensure list
-            if not isinstance(thumbnail, list):
-                thumbnail = [thumbnail]
-            # Define media group
-            for t in thumbnail:
-                t['group'] = t.get('group', group)
-            self.__media_thumbnail += ensure_format(
-                    thumbnail,
-                    set(['url', 'height', 'width', 'time', 'group']),
-                    set(['url', 'group']))
-        return self.__media_thumbnail
+        pass

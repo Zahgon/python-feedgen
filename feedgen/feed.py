@@ -439,10 +439,7 @@ class FeedGenerator(object):
         :param id: New Id of the ATOM feed.
         :returns: Id of the feed.
         '''
-
-        if id is not None:
-            self.__atom_id = id
-        return self.__atom_id
+        pass
 
     def updated(self, updated=None):
         '''Set or get the updated value which indicates the last time the feed
@@ -460,17 +457,7 @@ class FeedGenerator(object):
         :param updated: The modification date.
         :returns: Modification date as datetime.datetime
         '''
-        if updated is not None:
-            if isinstance(updated, string_types):
-                updated = dateutil.parser.parse(updated)
-            if not isinstance(updated, datetime):
-                raise ValueError('Invalid datetime format')
-            if updated.tzinfo is None:
-                raise ValueError('Datetime object has no timezone info')
-            self.__atom_updated = updated
-            self.__rss_lastBuildDate = updated
-
-        return self.__atom_updated
+        pass
 
     def lastBuildDate(self, lastBuildDate=None):
         '''Set or get the lastBuildDate value which indicates the last time the
@@ -488,7 +475,7 @@ class FeedGenerator(object):
         :param lastBuildDate: The modification date.
         :returns: Modification date as datetime.datetime
         '''
-        return self.updated(lastBuildDate)
+        pass
 
     def author(self, author=None, replace=False, **kwargs):
         '''Get or set author data. An author element is a dictionary containing
@@ -673,11 +660,7 @@ class FeedGenerator(object):
         :param protocol: Can be either HTTP-POST, XML-RPC or SOAP 1.1.
         :returns: Dictionary containing the cloud data.
         '''
-        if domain is not None:
-            self.__rss_cloud = {'domain': domain, 'port': port, 'path': path,
-                                'registerProcedure': registerProcedure,
-                                'protocol': protocol}
-        return self.__rss_cloud
+        pass
 
     def contributor(self, contributor=None, replace=False, **kwargs):
         '''Get or set the contributor data of the feed. This is an ATOM only
@@ -717,14 +700,7 @@ class FeedGenerator(object):
         :param version: Version of the software.
         :param uri: URI the software can be found.
         '''
-        if generator is not None:
-            self.__atom_generator = {'value': generator}
-            if version is not None:
-                self.__atom_generator['version'] = version
-            if uri is not None:
-                self.__atom_generator['uri'] = uri
-            self.__rss_generator = generator
-        return self.__atom_generator
+        pass
 
     def icon(self, icon=None):
         '''Get or set the icon of the feed which is a small image which
@@ -767,18 +743,7 @@ class FeedGenerator(object):
         :param description: Title of the link.
         :returns: Data of the image as dictionary.
         '''
-        if url is not None:
-            self.__rss_image = {'url': url}
-            if title is not None:
-                self.__rss_image['title'] = title
-            if link is not None:
-                self.__rss_image['link'] = link
-            if width:
-                self.__rss_image['width'] = width
-            if height:
-                self.__rss_image['height'] = height
-            self.__atom_logo = url
-        return self.__rss_image
+        pass
 
     def rights(self, rights=None):
         '''Get or set the rights value of the feed which conveys information
@@ -799,7 +764,7 @@ class FeedGenerator(object):
         :param copyright: The copyright notice.
         :returns: The copyright notice.
         '''
-        return self.rights(copyright)
+        pass
 
     def subtitle(self, subtitle=None):
         '''Get or set the subtitle value of the channel which contains a
@@ -824,7 +789,7 @@ class FeedGenerator(object):
         :returns: Description of the channel.
 
         '''
-        return self.subtitle(description)
+        pass
 
     def docs(self, docs=None):
         '''Get or set the docs value of the feed. This is an RSS only value. It
@@ -838,9 +803,7 @@ class FeedGenerator(object):
         :param docs: URL of the format documentation.
         :returns: URL of the format documentation.
         '''
-        if docs is not None:
-            self.__rss_docs = docs
-        return self.__rss_docs
+        pass
 
     def language(self, language=None):
         '''Get or set the language of the feed. It indicates the language the
@@ -866,9 +829,7 @@ class FeedGenerator(object):
         :param managingEditor: Email address of the managing editor.
         :returns: Email address of the managing editor.
         '''
-        if managingEditor is not None:
-            self.__rss_managingEditor = managingEditor
-        return self.__rss_managingEditor
+        pass
 
     def pubDate(self, pubDate=None):
         '''Set or get the publication date for the content in the channel. For
@@ -885,24 +846,13 @@ class FeedGenerator(object):
         :param pubDate: The publication date.
         :returns: Publication date as datetime.datetime
         '''
-        if pubDate is not None:
-            if isinstance(pubDate, string_types):
-                pubDate = dateutil.parser.parse(pubDate)
-            if not isinstance(pubDate, datetime):
-                raise ValueError('Invalid datetime format')
-            if pubDate.tzinfo is None:
-                raise ValueError('Datetime object has no timezone info')
-            self.__rss_pubDate = pubDate
-
-        return self.__rss_pubDate
+        pass
 
     def rating(self, rating=None):
         '''Set and get the PICS rating for the channel.    It is an RSS only
         value.
         '''
-        if rating is not None:
-            self.__rss_rating = rating
-        return self.__rss_rating
+        pass
 
     def skipHours(self, hours=None, replace=False):
         '''Set or get the value of skipHours, a hint for aggregators telling
@@ -915,16 +865,7 @@ class FeedGenerator(object):
         :param replace: Add or replace old data.
         :returns: List of hours the feedreaders should not check the feed.
         '''
-        if hours is not None:
-            if not (isinstance(hours, list) or isinstance(hours, set)):
-                hours = [hours]
-            for h in hours:
-                if h not in range(24):
-                    raise ValueError('Invalid hour %s' % h)
-            if replace or not self.__rss_skipHours:
-                self.__rss_skipHours = set()
-            self.__rss_skipHours |= set(hours)
-        return self.__rss_skipHours
+        pass
 
     def skipDays(self, days=None, replace=False):
         '''Set or get the value of skipDays, a hint for aggregators telling
@@ -937,17 +878,7 @@ class FeedGenerator(object):
         :param replace: Add or replace old data.
         :returns:       List of days the feedreaders should not check the feed.
         '''
-        if days is not None:
-            if not (isinstance(days, list) or isinstance(days, set)):
-                days = [days]
-            for d in days:
-                if d not in ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
-                             'Friday', 'Saturday', 'Sunday']:
-                    raise ValueError('Invalid day %s' % d)
-            if replace or not self.__rss_skipDays:
-                self.__rss_skipDays = set()
-            self.__rss_skipDays |= set(days)
-        return self.__rss_skipDays
+        pass
 
     def textInput(self, title=None, description=None, name=None, link=None):
         '''Get or set the value of textInput. This is an RSS only field.  The
@@ -962,13 +893,7 @@ class FeedGenerator(object):
                      requests.
         :returns: Dictionary containing textInput values.
         '''
-        if title is not None:
-            self.__rss_textInput = {}
-            self.__rss_textInput['title'] = title
-            self.__rss_textInput['description'] = description
-            self.__rss_textInput['name'] = name
-            self.__rss_textInput['link'] = link
-        return self.__rss_textInput
+        pass
 
     def ttl(self, ttl=None):
         '''Get or set the ttl value. It is an RSS only element. ttl stands for
@@ -979,9 +904,7 @@ class FeedGenerator(object):
                     cached.
         :returns: Time to live.
         '''
-        if ttl is not None:
-            self.__rss_ttl = int(ttl)
-        return self.__rss_ttl
+        pass
 
     def webMaster(self, webMaster=None):
         '''Get and set the value of webMaster, which represents the email
@@ -991,9 +914,7 @@ class FeedGenerator(object):
         :param webMaster: Email address of the webmaster.
         :returns: Email address of the webmaster.
         '''
-        if webMaster is not None:
-            self.__rss_webMaster = webMaster
-        return self.__rss_webMaster
+        pass
 
     def add_entry(self, feedEntry=None, order='prepend'):
         '''This method will add a new entry to the feed. If the feedEntry
@@ -1045,7 +966,7 @@ class FeedGenerator(object):
         omitted a new FeedEntry object is created automatically. This is just
         another name for add_entry(...)
         '''
-        return self.add_entry(item)
+        pass
 
     def entry(self, entry=None, replace=False):
         '''Get or set feed entries. Use the add_entry() method instead to
@@ -1056,36 +977,12 @@ class FeedGenerator(object):
         :param entry: FeedEntry object or list of FeedEntry objects.
         :returns: List ob all feed entries.
         '''
-        if entry is not None:
-            if not isinstance(entry, list):
-                entry = [entry]
-            if replace:
-                self.__feed_entries = []
-
-            version = sys.version_info[0]
-
-            if version == 2:
-                items = self.__extensions.iteritems()
-            else:
-                items = self.__extensions.items()
-
-            # Try to load extensions:
-            for e in entry:
-                for extname, ext in items:
-                    try:
-                        e.register_extension(extname,
-                                             ext['extension_class_entry'],
-                                             ext['atom'], ext['rss'])
-                    except ImportError:
-                        pass
-
-            self.__feed_entries += entry
-        return self.__feed_entries
+        pass
 
     def item(self, item=None, replace=False):
         '''Get or set feed items. This is just another name for entry(...)
         '''
-        return self.entry(item, replace)
+        pass
 
     def remove_entry(self, entry):
         '''Remove a single entry from the feed. This method accepts both the
@@ -1093,16 +990,13 @@ class FeedGenerator(object):
 
         :param entry: Entry or index of entry to remove.
         '''
-        if isinstance(entry, FeedEntry):
-            self.__feed_entries.remove(entry)
-        else:
-            self.__feed_entries.pop(entry)
+        pass
 
     def remove_item(self, item):
         '''Remove a single item from the feed. This is another name for
         remove_entry.
         '''
-        self.remove_entry(item)
+        pass
 
     def load_extension(self, name, atom=True, rss=True):
         '''Load a specific extension by name.

@@ -120,9 +120,7 @@ class PodcastEntryExtension(BaseEntryExtension):
         :param itunes_block: Block podcast episodes.
         :returns: If the podcast episode is blocked.
         '''
-        if itunes_block is not None:
-            self.__itunes_block = itunes_block
-        return self.__itunes_block
+        pass
 
     def itunes_image(self, itunes_image=None):
         '''Get or set the image for the podcast episode. This tag specifies the
@@ -146,12 +144,7 @@ class PodcastEntryExtension(BaseEntryExtension):
         :param itunes_image: Image of the podcast.
         :returns: Image of the podcast.
         '''
-        if itunes_image is not None:
-            if itunes_image.endswith('.jpg') or itunes_image.endswith('.png'):
-                self.__itunes_image = itunes_image
-            else:
-                raise ValueError('Image file must be png or jpg')
-        return self.__itunes_image
+        pass
 
     def itunes_duration(self, itunes_duration=None):
         '''Get or set the duration of the podcast episode. The content of this
@@ -167,13 +160,7 @@ class PodcastEntryExtension(BaseEntryExtension):
         :param itunes_duration: Duration of the podcast episode.
         :returns: Duration of the podcast episode.
         '''
-        if itunes_duration is not None:
-            itunes_duration = str(itunes_duration)
-            if len(itunes_duration.split(':')) > 3 or \
-                    itunes_duration.lstrip('0123456789:') != '':
-                raise ValueError('Invalid duration format')
-            self.__itunes_duration = itunes_duration
-        return self.__itunes_duration
+        pass
 
     def itunes_explicit(self, itunes_explicit=None):
         '''Get or the the itunes:explicit value of the podcast episode. This
@@ -210,10 +197,7 @@ class PodcastEntryExtension(BaseEntryExtension):
                                     support.
         :returns: If the episode has closed captioning support.
         '''
-        if itunes_is_closed_captioned is not None:
-            self.__itunes_is_closed_captioned = \
-                    itunes_is_closed_captioned in ('yes', True)
-        return self.__itunes_is_closed_captioned
+        pass
 
     def itunes_order(self, itunes_order=None):
         '''Get or set the itunes:order value of the podcast episode. This tag
@@ -232,9 +216,7 @@ class PodcastEntryExtension(BaseEntryExtension):
         :param itunes_order: The order of the episode.
         :returns: The order of the episode.
         '''
-        if itunes_order is not None:
-            self.__itunes_order = int(itunes_order)
-        return self.__itunes_order
+        pass
 
     def itunes_subtitle(self, itunes_subtitle=None):
         '''Get or set the itunes:subtitle value for the podcast episode. The
@@ -244,9 +226,7 @@ class PodcastEntryExtension(BaseEntryExtension):
         :param itunes_subtitle: Subtitle of the podcast episode.
         :returns: Subtitle of the podcast episode.
         '''
-        if itunes_subtitle is not None:
-            self.__itunes_subtitle = itunes_subtitle
-        return self.__itunes_subtitle
+        pass
 
     def itunes_summary(self, itunes_summary=None):
         '''Get or set the itunes:summary value for the podcast episode. The

@@ -139,11 +139,7 @@ class GeoEntryExtension(BaseEntryExtension):
         :param point: The GeoRSS formatted point (i.e. "42.36 -71.05")
         :returns: The current georss:point of the entry.
         '''
-
-        if point is not None:
-            self.__point = point
-
-        return self.__point
+        pass
 
     def line(self, line=None):
         '''Get or set the georss:line of the entry
@@ -152,10 +148,7 @@ class GeoEntryExtension(BaseEntryExtension):
                       -109.48 43.84 -109.86")
         :return: The current georss:line of the entry
         '''
-        if line is not None:
-            self.__line = line
-
-        return self.__line
+        pass
 
     def polygon(self, polygon=None):
         '''Get or set the georss:polygon of the entry
@@ -164,10 +157,7 @@ class GeoEntryExtension(BaseEntryExtension):
                         46.46 -109.48 43.84 -109.86 45.256 -110.45")
         :return: The current georss:polygon of the entry
         '''
-        if polygon is not None:
-            self.__polygon = polygon
-
-        return self.__polygon
+        pass
 
     def box(self, box=None):
         '''
@@ -177,10 +167,7 @@ class GeoEntryExtension(BaseEntryExtension):
                     -69.856")
         :return: The current georss:box of the entry
         '''
-        if box is not None:
-            self.__box = box
-
-        return self.__box
+        pass
 
     def featuretypetag(self, featuretypetag=None):
         '''
@@ -189,10 +176,7 @@ class GeoEntryExtension(BaseEntryExtension):
         :param featuretypetag: The GeoRSS feaaturertyptag (e.g. "city")
         :return: The current georss:featurertypetag
         '''
-        if featuretypetag is not None:
-            self.__featuretypetag = featuretypetag
-
-        return self.__featuretypetag
+        pass
 
     def relationshiptag(self, relationshiptag=None):
         '''
@@ -202,10 +186,7 @@ class GeoEntryExtension(BaseEntryExtension):
                                 "is-centred-at")
         :return: the current georss:relationshiptag
         '''
-        if relationshiptag is not None:
-            self.__relationshiptag = relationshiptag
-
-        return self.__relationshiptag
+        pass
 
     def featurename(self, featurename=None):
         '''
@@ -214,10 +195,7 @@ class GeoEntryExtension(BaseEntryExtension):
         :param featuretypetag: The GeoRSS featurename (e.g. "Footscray")
         :return: the current georss:featurename
         '''
-        if featurename is not None:
-            self.__featurename = featurename
-
-        return self.__featurename
+        pass
 
     def elev(self, elev=None):
         '''
@@ -227,13 +205,7 @@ class GeoEntryExtension(BaseEntryExtension):
         :type elev: numbers.Number
         :return: the current georss:elev
         '''
-        if elev is not None:
-            if not isinstance(elev, numbers.Number):
-                raise ValueError("elev tag must be numeric: {}".format(elev))
-
-            self.__elev = elev
-
-        return self.__elev
+        pass
 
     def floor(self, floor=None):
         '''
@@ -243,13 +215,7 @@ class GeoEntryExtension(BaseEntryExtension):
         :type floor: int
         :return: the current georss:floor
         '''
-        if floor is not None:
-            if not isinstance(floor, int):
-                raise ValueError("floor tag must be int: {}".format(floor))
-
-            self.__floor = floor
-
-        return self.__floor
+        pass
 
     def radius(self, radius=None):
         '''
@@ -259,15 +225,7 @@ class GeoEntryExtension(BaseEntryExtension):
         :type radius: numbers.Number
         :return: the current georss:radius
         '''
-        if radius is not None:
-            if not isinstance(radius, numbers.Number):
-                raise ValueError(
-                    "radius tag must be numeric: {}".format(radius)
-                )
-
-            self.__radius = radius
-
-        return self.__radius
+        pass
 
     def geom_from_geo_interface(self, geom):
         '''
@@ -294,36 +252,4 @@ class GeoEntryExtension(BaseEntryExtension):
         :param geom: Geometry object with a __geo_interface__ property
         :return: the formatted GeoRSS geometry
         '''
-        geojson = geom.__geo_interface__
-
-        if geojson['type'] not in ('Point', 'LineString', 'Polygon'):
-            raise GeoRSSGeometryError(geom)
-
-        if geojson['type'] == 'Point':
-
-            coords = '{:f} {:f}'.format(
-                geojson['coordinates'][1],  # latitude is y
-                geojson['coordinates'][0]
-            )
-            return self.point(coords)
-
-        elif geojson['type'] == 'LineString':
-
-            coords = ' '.join(
-                '{:f} {:f}'.format(vertex[1], vertex[0])
-                for vertex in
-                geojson['coordinates']
-            )
-            return self.line(coords)
-
-        elif geojson['type'] == 'Polygon':
-
-            if len(geojson['coordinates']) > 1:
-                warnings.warn(GeoRSSPolygonInteriorWarning(geom))
-
-            coords = ' '.join(
-                '{:f} {:f}'.format(vertex[1], vertex[0])
-                for vertex in
-                geojson['coordinates'][0]
-            )
-            return self.polygon(coords)
+        pass

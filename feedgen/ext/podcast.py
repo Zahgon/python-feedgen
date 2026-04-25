@@ -123,9 +123,7 @@ class PodcastExtension(BaseExtension):
         :param itunes_block: Block the podcast.
         :returns: If the podcast is blocked.
         '''
-        if itunes_block is not None:
-            self.__itunes_block = itunes_block
-        return self.__itunes_block
+        pass
 
     def itunes_category(self, itunes_category=None, replace=False, **kwargs):
         '''Get or set the ITunes category which appears in the category column
@@ -211,12 +209,7 @@ class PodcastExtension(BaseExtension):
         :param itunes_image: Image of the podcast.
         :returns: Image of the podcast.
         '''
-        if itunes_image is not None:
-            if itunes_image.endswith('.jpg') or itunes_image.endswith('.png'):
-                self.__itunes_image = itunes_image
-            else:
-                ValueError('Image file must be png or jpg')
-        return self.__itunes_image
+        pass
 
     def itunes_explicit(self, itunes_explicit=None):
         '''Get or the the itunes:explicit value of the podcast. This tag should
@@ -304,9 +297,7 @@ class PodcastExtension(BaseExtension):
         :param itunes_subtitle: Subtitle of the podcast.
         :returns: Subtitle of the podcast.
         '''
-        if itunes_subtitle is not None:
-            self.__itunes_subtitle = itunes_subtitle
-        return self.__itunes_subtitle
+        pass
 
     def itunes_summary(self, itunes_summary=None):
         '''Get or set the itunes:summary value for the podcast. The contents of

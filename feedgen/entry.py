@@ -283,10 +283,7 @@ class FeedEntry(object):
         :param id: New Id of the entry.
         :returns: Id of the entry.
         '''
-        if id is not None:
-            self.__atom_id = id
-            self.__rss_guid = {'guid': id, 'permalink': False}
-        return self.__atom_id
+        pass
 
     def guid(self, guid=None, permalink=False):
         '''Get or set the entries guid which is a string that uniquely
@@ -296,10 +293,7 @@ class FeedEntry(object):
         :param permalink: If this is a permanent identifier for this item
         :returns: Id and permalink setting of the entry.
         '''
-        if guid is not None:
-            self.__atom_id = guid
-            self.__rss_guid = {'guid': guid, 'permalink': permalink}
-        return self.__rss_guid
+        pass
 
     def updated(self, updated=None):
         '''Set or get the updated value which indicates the last time the entry
@@ -312,17 +306,7 @@ class FeedEntry(object):
         :param updated: The modification date.
         :returns: Modification date as datetime.datetime
         '''
-        if updated is not None:
-            if isinstance(updated, string_types):
-                updated = dateutil.parser.parse(updated)
-            if not isinstance(updated, datetime):
-                raise ValueError('Invalid datetime format')
-            if updated.tzinfo is None:
-                raise ValueError('Datetime object has no timezone info')
-            self.__atom_updated = updated
-            self.__rss_lastBuildDate = updated
-
-        return self.__atom_updated
+        pass
 
     def author(self, author=None, replace=False, **kwargs):
         '''Get or set author data. An author element is a dict containing a
@@ -496,13 +480,7 @@ class FeedEntry(object):
                           summary.
         :returns: The entries description.
         '''
-        if description is not None:
-            self.__rss_description = description
-            if isSummary:
-                self.__atom_summary = {'summary': description}
-            else:
-                self.__atom_content = {'content': description}
-        return self.__rss_description
+        pass
 
     def category(self, category=None, replace=False, **kwargs):
         '''Get or set categories that the entry belongs to.
@@ -584,24 +562,14 @@ class FeedEntry(object):
         :param published: The creation date.
         :returns: Creation date as datetime.datetime
         '''
-        if published is not None:
-            if isinstance(published, string_types):
-                published = dateutil.parser.parse(published)
-            if not isinstance(published, datetime):
-                raise ValueError('Invalid datetime format')
-            if published.tzinfo is None:
-                raise ValueError('Datetime object has no timezone info')
-            self.__atom_published = published
-            self.__rss_pubDate = published
-
-        return self.__atom_published
+        pass
 
     def pubDate(self, pubDate=None):
         '''Get or set the pubDate of the entry which indicates when the entry
         was published. This method is just another name for the published(...)
         method.
         '''
-        return self.published(pubDate)
+        pass
 
     def pubdate(self, pubDate=None):
         '''Get or set the pubDate of the entry which indicates when the entry
@@ -611,9 +579,7 @@ class FeedEntry(object):
         pubdate(…) is deprecated and may be removed in feedgen ≥ 0.8. Use
         pubDate(…) instead.
         '''
-        warnings.warn('pubdate(…) is deprecated and may be removed in feedgen '
-                      '≥ 0.8. Use pubDate(…) instead.')
-        return self.published(pubDate)
+        pass
 
     def rights(self, rights=None):
         '''Get or set the rights value of the entry which conveys information
@@ -634,9 +600,7 @@ class FeedEntry(object):
         :param comments: URL to the comments page.
         :returns: URL to the comments page.
         '''
-        if comments is not None:
-            self.__rss_comments = comments
-        return self.__rss_comments
+        pass
 
     def source(self, url=None, title=None):
         '''Get or set the source for the current feed entry.
@@ -649,10 +613,7 @@ class FeedEntry(object):
         :param title: Title of the linked resource
         :returns: Source element as dictionaries.
         '''
-        if url is not None and title is not None:
-            self.__rss_source = {'url': url, 'title': title}
-            self.__atom_source = {'link': url, 'title': title}
-        return self.__rss_source
+        pass
 
     def enclosure(self, url=None, length=None, type=None):
         '''Get or set the value of enclosure which describes a media object
@@ -667,9 +628,7 @@ class FeedEntry(object):
         :param type: Mimetype of the linked media.
         :returns: Data of the enclosure element.
         '''
-        if url is not None:
-            self.link(href=url, rel='enclosure', type=type, length=str(length))
-        return self.__rss_enclosure
+        pass
 
     def ttl(self, ttl=None):
         '''Get or set the ttl value. It is an RSS only element. ttl stands for
@@ -679,9 +638,7 @@ class FeedEntry(object):
         :param ttl: Integer value representing the time to live.
         :returns: Time to live of of the entry.
         '''
-        if ttl is not None:
-            self.__rss_ttl = int(ttl)
-        return self.__rss_ttl
+        pass
 
     def load_extension(self, name, atom=True, rss=True):
         '''Load a specific extension by name.

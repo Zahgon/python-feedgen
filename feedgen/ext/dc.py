@@ -123,13 +123,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set coverage (default: True).
         :returns: Coverage of the feed.
         '''
-        if coverage is not None:
-            if not isinstance(coverage, list):
-                coverage = [coverage]
-            if replace or not self._dcelem_coverage:
-                self._dcelem_coverage = []
-            self._dcelem_coverage = coverage
-        return self._dcelem_coverage
+        pass
 
     def dc_creator(self, creator=None, replace=False):
         '''Get or set the dc:creator which is an entity primarily responsible
@@ -142,13 +136,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set creators (default: False).
         :returns: List of creators.
         '''
-        if creator is not None:
-            if not isinstance(creator, list):
-                creator = [creator]
-            if replace or not self._dcelem_creator:
-                self._dcelem_creator = []
-            self._dcelem_creator += creator
-        return self._dcelem_creator
+        pass
 
     def dc_date(self, date=None, replace=True):
         '''Get or set the dc:date which describes a point or period of time
@@ -161,13 +149,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set dates (default: True).
         :returns: List of dates.
         '''
-        if date is not None:
-            if not isinstance(date, list):
-                date = [date]
-            if replace or not self._dcelem_date:
-                self._dcelem_date = []
-            self._dcelem_date += date
-        return self._dcelem_date
+        pass
 
     def dc_description(self, description=None, replace=True):
         '''Get or set the dc:description which is an account of the resource.
@@ -179,13 +161,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set descriptions (default: True).
         :returns: List of descriptions.
         '''
-        if description is not None:
-            if not isinstance(description, list):
-                description = [description]
-            if replace or not self._dcelem_description:
-                self._dcelem_description = []
-            self._dcelem_description += description
-        return self._dcelem_description
+        pass
 
     def dc_format(self, format=None, replace=True):
         '''Get or set the dc:format which describes the file format, physical
@@ -198,13 +174,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set format (default: True).
         :returns: Format of the resource.
         '''
-        if format is not None:
-            if not isinstance(format, list):
-                format = [format]
-            if replace or not self._dcelem_format:
-                self._dcelem_format = []
-            self._dcelem_format += format
-        return self._dcelem_format
+        pass
 
     def dc_identifier(self, identifier=None, replace=True):
         '''Get or set the dc:identifier which should be an unambiguous
@@ -217,13 +187,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set identifier (default: True).
         :returns: Identifiers of the resource.
         '''
-        if identifier is not None:
-            if not isinstance(identifier, list):
-                identifier = [identifier]
-            if replace or not self._dcelem_identifier:
-                self._dcelem_identifier = []
-            self._dcelem_identifier += identifier
-        return self._dcelem_identifier
+        pass
 
     def dc_language(self, language=None, replace=True):
         '''Get or set the dc:language which describes a language of the
@@ -236,13 +200,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set languages (default: True).
         :returns: List of languages.
         '''
-        if language is not None:
-            if not isinstance(language, list):
-                language = [language]
-            if replace or not self._dcelem_language:
-                self._dcelem_language = []
-            self._dcelem_language += language
-        return self._dcelem_language
+        pass
 
     def dc_publisher(self, publisher=None, replace=False):
         '''Get or set the dc:publisher which is an entity responsible for
@@ -255,13 +213,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set publishers (default: False).
         :returns: List of publishers.
         '''
-        if publisher is not None:
-            if not isinstance(publisher, list):
-                publisher = [publisher]
-            if replace or not self._dcelem_publisher:
-                self._dcelem_publisher = []
-            self._dcelem_publisher += publisher
-        return self._dcelem_publisher
+        pass
 
     def dc_relation(self, relation=None, replace=False):
         '''Get or set the dc:relation which describes a related resource.
@@ -273,13 +225,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set relations (default: False).
         :returns: List of relations.
         '''
-        if relation is not None:
-            if not isinstance(relation, list):
-                relation = [relation]
-            if replace or not self._dcelem_relation:
-                self._dcelem_relation = []
-            self._dcelem_relation += relation
-        return self._dcelem_relation
+        pass
 
     def dc_rights(self, rights=None, replace=False):
         '''Get or set the dc:rights which may contain information about rights
@@ -292,13 +238,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set rights (default: False).
         :returns: List of rights information.
         '''
-        if rights is not None:
-            if not isinstance(rights, list):
-                rights = [rights]
-            if replace or not self._dcelem_rights:
-                self._dcelem_rights = []
-            self._dcelem_rights += rights
-        return self._dcelem_rights
+        pass
 
     def dc_source(self, source=None, replace=False):
         '''Get or set the dc:source which is a related resource from which the
@@ -316,13 +256,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set sources (default: False).
         :returns: List of sources.
         '''
-        if source is not None:
-            if not isinstance(source, list):
-                source = [source]
-            if replace or not self._dcelem_source:
-                self._dcelem_source = []
-            self._dcelem_source += source
-        return self._dcelem_source
+        pass
 
     def dc_subject(self, subject=None, replace=False):
         '''Get or set the dc:subject which describes the topic of the resource.
@@ -334,13 +268,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set subjects (default: False).
         :returns: List of subjects.
         '''
-        if subject is not None:
-            if not isinstance(subject, list):
-                subject = [subject]
-            if replace or not self._dcelem_subject:
-                self._dcelem_subject = []
-            self._dcelem_subject += subject
-        return self._dcelem_subject
+        pass
 
     def dc_title(self, title=None, replace=True):
         '''Get or set the dc:title which is a name given to the resource.
@@ -352,13 +280,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set titles (default: False).
         :returns: List of titles.
         '''
-        if title is not None:
-            if not isinstance(title, list):
-                title = [title]
-            if replace or not self._dcelem_title:
-                self._dcelem_title = []
-            self._dcelem_title += title
-        return self._dcelem_title
+        pass
 
     def dc_type(self, type=None, replace=False):
         '''Get or set the dc:type which describes the nature or genre of the
@@ -371,13 +293,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set types (default: False).
         :returns: List of types.
         '''
-        if type is not None:
-            if not isinstance(type, list):
-                type = [type]
-            if replace or not self._dcelem_type:
-                self._dcelem_type = []
-            self._dcelem_type += type
-        return self._dcelem_type
+        pass
 
 
 class DcExtension(DcBaseExtension):
