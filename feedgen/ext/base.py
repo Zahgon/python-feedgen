@@ -18,7 +18,7 @@ class BaseExtension(object):
     def extend_ns(self):
         '''Returns a dict that will be used in the namespace map for the feed.
         '''
-        return dict()
+        pass
 
     def extend_rss(self, feed):
         '''Extend a RSS feed xml structure containing all previously set
@@ -27,7 +27,7 @@ class BaseExtension(object):
         :param feed: The feed xml root element.
         :returns: The feed root element.
         '''
-        return feed
+        pass
 
     def extend_atom(self, feed):
         '''Extend an ATOM feed xml structure containing all previously set
@@ -36,7 +36,7 @@ class BaseExtension(object):
         :param feed: The feed xml root element.
         :returns: The feed root element.
         '''
-        return feed
+        pass
 
 
 class BaseEntryExtension(BaseExtension):

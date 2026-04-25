@@ -42,24 +42,14 @@ class DcBaseExtension(BaseExtension):
         self._dcelem_type = None
 
     def extend_ns(self):
-        return {'dc': 'http://purl.org/dc/elements/1.1/'}
+        pass
 
     def _extend_xml(self, xml_element):
         '''Extend xml_element with set DC fields.
 
         :param xml_element: etree element
         '''
-        DCELEMENTS_NS = 'http://purl.org/dc/elements/1.1/'
-
-        for elem in ['contributor', 'coverage', 'creator', 'date',
-                     'description', 'language', 'publisher', 'relation',
-                     'rights', 'source', 'subject', 'title', 'type', 'format',
-                     'identifier']:
-            if hasattr(self, '_dcelem_%s' % elem):
-                for val in getattr(self, '_dcelem_%s' % elem) or []:
-                    node = xml_elem('{%s}%s' % (DCELEMENTS_NS, elem),
-                                    xml_element)
-                    node.text = val
+        pass
 
     def extend_atom(self, atom_feed):
         '''Extend an Atom feed with the set DC fields.
@@ -68,9 +58,7 @@ class DcBaseExtension(BaseExtension):
         :returns: The feed root element
         '''
 
-        self._extend_xml(atom_feed)
-
-        return atom_feed
+        pass
 
     def extend_rss(self, rss_feed):
         '''Extend a RSS feed with the set DC fields.
@@ -78,10 +66,7 @@ class DcBaseExtension(BaseExtension):
         :param rss_feed: The feed root element
         :returns: The feed root element.
         '''
-        channel = rss_feed[0]
-        self._extend_xml(channel)
-
-        return rss_feed
+        pass
 
     def dc_contributor(self, contributor=None, replace=False):
         '''Get or set the dc:contributor which is an entity responsible for
@@ -94,13 +79,7 @@ class DcBaseExtension(BaseExtension):
         :param replace: Replace already set contributors (default: False).
         :returns: List of contributors.
         '''
-        if contributor is not None:
-            if not isinstance(contributor, list):
-                contributor = [contributor]
-            if replace or not self._dcelem_contributor:
-                self._dcelem_contributor = []
-            self._dcelem_contributor += contributor
-        return self._dcelem_contributor
+        pass
 
     def dc_coverage(self, coverage=None, replace=True):
         '''Get or set the dc:coverage which indicated the spatial or temporal
@@ -310,8 +289,7 @@ class DcEntryExtension(DcBaseExtension):
         :param entry: An atom entry element.
         :returns: The entry element.
         '''
-        self._extend_xml(entry)
-        return entry
+        pass
 
     def extend_rss(self, item):
         '''Add dc elements to a RSS item. Alters the item itself.
@@ -319,5 +297,4 @@ class DcEntryExtension(DcBaseExtension):
         :param item: A RSS item element.
         :returns: The item element.
         '''
-        self._extend_xml(item)
-        return item
+        pass

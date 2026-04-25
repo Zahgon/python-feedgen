@@ -89,117 +89,7 @@ class FeedGenerator(object):
 
         :returns: Tuple containing the feed root element and the element tree.
         '''
-        nsmap = dict()
-        if extensions:
-            for ext in self.__extensions.values() or []:
-                if ext.get('atom'):
-                    nsmap.update(ext['inst'].extend_ns())
-
-        feed = xml_elem('feed',
-                        xmlns='http://www.w3.org/2005/Atom',
-                        nsmap=nsmap)
-        if self.__atom_feed_xml_lang:
-            feed.attrib['{http://www.w3.org/XML/1998/namespace}lang'] = \
-                    self.__atom_feed_xml_lang
-
-        if not (self.__atom_id and self.__atom_title and self.__atom_updated):
-            missing = ([] if self.__atom_title else ['title']) + \
-                      ([] if self.__atom_id else ['id']) + \
-                      ([] if self.__atom_updated else ['updated'])
-            missing = ', '.join(missing)
-            raise ValueError('Required fields not set (%s)' % missing)
-        id = xml_elem('id', feed)
-        id.text = self.__atom_id
-        title = xml_elem('title', feed)
-        title.text = self.__atom_title
-        updated = xml_elem('updated', feed)
-        updated.text = self.__atom_updated.isoformat()
-
-        # Add author elements
-        for a in self.__atom_author or []:
-            # Atom requires a name. Skip elements without.
-            if not a.get('name'):
-                continue
-            author = xml_elem('author', feed)
-            name = xml_elem('name', author)
-            name.text = a.get('name')
-            if a.get('email'):
-                email = xml_elem('email', author)
-                email.text = a.get('email')
-            if a.get('uri'):
-                uri = xml_elem('uri', author)
-                uri.text = a.get('uri')
-
-        for ln in self.__atom_link or []:
-            link = xml_elem('link', feed, href=ln['href'])
-            if ln.get('rel'):
-                link.attrib['rel'] = ln['rel']
-            if ln.get('type'):
-                link.attrib['type'] = ln['type']
-            if ln.get('hreflang'):
-                link.attrib['hreflang'] = ln['hreflang']
-            if ln.get('title'):
-                link.attrib['title'] = ln['title']
-            if ln.get('length'):
-                link.attrib['length'] = ln['length']
-
-        for c in self.__atom_category or []:
-            cat = xml_elem('category', feed, term=c['term'])
-            if c.get('scheme'):
-                cat.attrib['scheme'] = c['scheme']
-            if c.get('label'):
-                cat.attrib['label'] = c['label']
-
-        # Add author elements
-        for c in self.__atom_contributor or []:
-            # Atom requires a name. Skip elements without.
-            if not c.get('name'):
-                continue
-            contrib = xml_elem('contributor', feed)
-            name = xml_elem('name', contrib)
-            name.text = c.get('name')
-            if c.get('email'):
-                email = xml_elem('email', contrib)
-                email.text = c.get('email')
-            if c.get('uri'):
-                uri = xml_elem('uri', contrib)
-                uri.text = c.get('uri')
-
-        if self.__atom_generator and self.__atom_generator.get('value'):
-            generator = xml_elem('generator', feed)
-            generator.text = self.__atom_generator['value']
-            if self.__atom_generator.get('uri'):
-                generator.attrib['uri'] = self.__atom_generator['uri']
-            if self.__atom_generator.get('version'):
-                generator.attrib['version'] = self.__atom_generator['version']
-
-        if self.__atom_icon:
-            icon = xml_elem('icon', feed)
-            icon.text = self.__atom_icon
-
-        if self.__atom_logo:
-            logo = xml_elem('logo', feed)
-            logo.text = self.__atom_logo
-
-        if self.__atom_rights:
-            rights = xml_elem('rights', feed)
-            rights.text = self.__atom_rights
-
-        if self.__atom_subtitle:
-            subtitle = xml_elem('subtitle', feed)
-            subtitle.text = self.__atom_subtitle
-
-        if extensions:
-            for ext in self.__extensions.values() or []:
-                if ext.get('atom'):
-                    ext['inst'].extend_atom(feed)
-
-        for entry in self.__feed_entries:
-            entry = entry.atom_entry()
-            feed.append(entry)
-
-        doc = etree.ElementTree(feed)
-        return feed, doc
+        pass
 
     def atom_str(self, pretty=False, extensions=True, encoding='UTF-8',
                  xml_declaration=True):
@@ -219,9 +109,7 @@ class FeedGenerator(object):
         details have a look at the `lxml documentation
         <https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.tostring>`_
         '''
-        feed, doc = self._create_atom(extensions=extensions)
-        return etree.tostring(doc, pretty_print=pretty, encoding=encoding,
-                              xml_declaration=xml_declaration)
+        pass
 
     def atom_file(self, filename, extensions=True, pretty=False,
                   encoding='UTF-8', xml_declaration=True):
@@ -236,9 +124,7 @@ class FeedGenerator(object):
         :param xml_declaration: If an XML declaration should be added to the
             output (Default: enabled).
         '''
-        feed, doc = self._create_atom(extensions=extensions)
-        doc.write(filename, pretty_print=pretty, encoding=encoding,
-                  xml_declaration=xml_declaration)
+        pass
 
     def _create_rss(self, extensions=True):
         '''Create an RSS feed xml structure containing all previously set
@@ -246,136 +132,7 @@ class FeedGenerator(object):
 
         :returns: Tuple containing the feed root element and the element tree.
         '''
-        nsmap = dict()
-        if extensions:
-            for ext in self.__extensions.values() or []:
-                if ext.get('rss'):
-                    nsmap.update(ext['inst'].extend_ns())
-
-        nsmap.update({'atom':  'http://www.w3.org/2005/Atom',
-                      'content': 'http://purl.org/rss/1.0/modules/content/'})
-
-        feed = xml_elem('rss', version='2.0', nsmap=nsmap)
-        channel = xml_elem('channel', feed)
-        if not (self.__rss_title and
-                self.__rss_link and
-                self.__rss_description):
-            missing = ([] if self.__rss_title else ['title']) + \
-                      ([] if self.__rss_link else ['link']) + \
-                      ([] if self.__rss_description else ['description'])
-            missing = ', '.join(missing)
-            raise ValueError('Required fields not set (%s)' % missing)
-        title = xml_elem('title', channel)
-        title.text = self.__rss_title
-        link = xml_elem('link', channel)
-        link.text = self.__rss_link
-        desc = xml_elem('description', channel)
-        desc.text = self.__rss_description
-        for ln in self.__atom_link or []:
-            # It is recommended to include a atom self link in rss documents…
-            if ln.get('rel') == 'self':
-                selflink = xml_elem('{http://www.w3.org/2005/Atom}link',
-                                    channel, href=ln['href'], rel='self')
-                if ln.get('type'):
-                    selflink.attrib['type'] = ln['type']
-                if ln.get('hreflang'):
-                    selflink.attrib['hreflang'] = ln['hreflang']
-                if ln.get('title'):
-                    selflink.attrib['title'] = ln['title']
-                if ln.get('length'):
-                    selflink.attrib['length'] = ln['length']
-                break
-        if self.__rss_category:
-            for cat in self.__rss_category:
-                category = xml_elem('category', channel)
-                category.text = cat['value']
-                if cat.get('domain'):
-                    category.attrib['domain'] = cat['domain']
-        if self.__rss_cloud:
-            cloud = xml_elem('cloud', channel)
-            cloud.attrib['domain'] = self.__rss_cloud.get('domain')
-            cloud.attrib['port'] = self.__rss_cloud.get('port')
-            cloud.attrib['path'] = self.__rss_cloud.get('path')
-            cloud.attrib['registerProcedure'] = self.__rss_cloud.get(
-                    'registerProcedure')
-            cloud.attrib['protocol'] = self.__rss_cloud.get('protocol')
-        if self.__rss_copyright:
-            copyright = xml_elem('copyright', channel)
-            copyright.text = self.__rss_copyright
-        if self.__rss_docs:
-            docs = xml_elem('docs', channel)
-            docs.text = self.__rss_docs
-        if self.__rss_generator:
-            generator = xml_elem('generator', channel)
-            generator.text = self.__rss_generator
-        if self.__rss_image:
-            image = xml_elem('image', channel)
-            url = xml_elem('url', image)
-            url.text = self.__rss_image.get('url')
-            title = xml_elem('title', image)
-            title.text = self.__rss_image.get('title', self.__rss_title)
-            link = xml_elem('link', image)
-            link.text = self.__rss_image.get('link', self.__rss_link)
-            if self.__rss_image.get('width'):
-                width = xml_elem('width', image)
-                width.text = self.__rss_image.get('width')
-            if self.__rss_image.get('height'):
-                height = xml_elem('height', image)
-                height.text = self.__rss_image.get('height')
-            if self.__rss_image.get('description'):
-                description = xml_elem('description', image)
-                description.text = self.__rss_image.get('description')
-        if self.__rss_language:
-            language = xml_elem('language', channel)
-            language.text = self.__rss_language
-        if self.__rss_lastBuildDate:
-            lastBuildDate = xml_elem('lastBuildDate', channel)
-
-            lastBuildDate.text = formatRFC2822(self.__rss_lastBuildDate)
-        if self.__rss_managingEditor:
-            managingEditor = xml_elem('managingEditor', channel)
-            managingEditor.text = self.__rss_managingEditor
-        if self.__rss_pubDate:
-            pubDate = xml_elem('pubDate', channel)
-            pubDate.text = formatRFC2822(self.__rss_pubDate)
-        if self.__rss_rating:
-            rating = xml_elem('rating', channel)
-            rating.text = self.__rss_rating
-        if self.__rss_skipHours:
-            skipHours = xml_elem('skipHours', channel)
-            for h in self.__rss_skipHours:
-                hour = xml_elem('hour', skipHours)
-                hour.text = str(h)
-        if self.__rss_skipDays:
-            skipDays = xml_elem('skipDays', channel)
-            for d in self.__rss_skipDays:
-                day = xml_elem('day', skipDays)
-                day.text = d
-        if self.__rss_textInput:
-            textInput = xml_elem('textInput', channel)
-            textInput.attrib['title'] = self.__rss_textInput.get('title')
-            textInput.attrib['description'] = \
-                self.__rss_textInput.get('description')
-            textInput.attrib['name'] = self.__rss_textInput.get('name')
-            textInput.attrib['link'] = self.__rss_textInput.get('link')
-        if self.__rss_ttl:
-            ttl = xml_elem('ttl', channel)
-            ttl.text = str(self.__rss_ttl)
-        if self.__rss_webMaster:
-            webMaster = xml_elem('webMaster', channel)
-            webMaster.text = self.__rss_webMaster
-
-        if extensions:
-            for ext in self.__extensions.values() or []:
-                if ext.get('rss'):
-                    ext['inst'].extend_rss(feed)
-
-        for entry in self.__feed_entries:
-            item = entry.rss_entry()
-            channel.append(item)
-
-        doc = etree.ElementTree(feed)
-        return feed, doc
+        pass
 
     def rss_str(self, pretty=False, extensions=True, encoding='UTF-8',
                 xml_declaration=True):
@@ -395,9 +152,7 @@ class FeedGenerator(object):
         details have a look at the `lxml documentation
         <https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.tostring>`_
         '''
-        feed, doc = self._create_rss(extensions=extensions)
-        return etree.tostring(doc, pretty_print=pretty, encoding=encoding,
-                              xml_declaration=xml_declaration)
+        pass
 
     def rss_file(self, filename, extensions=True, pretty=False,
                  encoding='UTF-8', xml_declaration=True):
@@ -412,9 +167,7 @@ class FeedGenerator(object):
         :param xml_declaration: If an XML declaration should be added to the
             output (Default: enabled).
         '''
-        feed, doc = self._create_rss(extensions=extensions)
-        doc.write(filename, pretty_print=pretty, encoding=encoding,
-                  xml_declaration=xml_declaration)
+        pass
 
     def title(self, title=None):
         '''Get or set the title value of the feed. It should contain a human
@@ -425,10 +178,7 @@ class FeedGenerator(object):
         :param title: The new title of the feed.
         :returns: The feeds title.
         '''
-        if title is not None:
-            self.__atom_title = title
-            self.__rss_title = title
-        return self.__atom_title
+        pass
 
     def id(self, id=None):
         '''Get or set the feed id which identifies the feed using a universally
@@ -512,19 +262,7 @@ class FeedGenerator(object):
             [{'name':'John Doe','email':'jdoe@example.com'}]
 
         '''
-        if author is None and kwargs:
-            author = kwargs
-        if author is not None:
-            if replace or self.__atom_author is None:
-                self.__atom_author = []
-            self.__atom_author += ensure_format(author,
-                                                set(['name', 'email', 'uri']),
-                                                set(['name']))
-            self.__rss_author = []
-            for a in self.__atom_author:
-                if a.get('email'):
-                    self.__rss_author.append(a['email'])
-        return self.__atom_author
+        pass
 
     def link(self, link=None, replace=False, **kwargs):
         '''Get or set link data. An link element is a dict with the fields
@@ -571,38 +309,7 @@ class FeedGenerator(object):
             [{'href':'http://example.com/', 'rel':'self'}]
 
         '''
-        if link is None and kwargs:
-            link = kwargs
-        if link is not None:
-            if replace or self.__atom_link is None:
-                self.__atom_link = []
-            self.__atom_link += ensure_format(
-                link,
-                set(['href', 'rel', 'type', 'hreflang', 'title', 'length']),
-                set(['href']),
-                {'rel': [
-                    'about', 'alternate', 'appendix', 'archives', 'author',
-                    'bookmark', 'canonical', 'chapter', 'collection',
-                    'contents', 'copyright', 'create-form', 'current',
-                    'derivedfrom', 'describedby', 'describes', 'disclosure',
-                    'duplicate', 'edit', 'edit-form', 'edit-media',
-                    'enclosure', 'first', 'glossary', 'help', 'hosts', 'hub',
-                    'icon', 'index', 'item', 'last', 'latest-version',
-                    'license', 'lrdd', 'memento', 'monitor', 'monitor-group',
-                    'next', 'next-archive', 'nofollow', 'noreferrer',
-                    'original', 'payment', 'predecessor-version', 'prefetch',
-                    'prev', 'preview', 'previous', 'prev-archive',
-                    'privacy-policy', 'profile', 'related', 'replies',
-                    'search', 'section', 'self', 'service', 'start',
-                    'stylesheet', 'subsection', 'successor-version', 'tag',
-                    'terms-of-service', 'timegate', 'timemap', 'type', 'up',
-                    'version-history', 'via', 'working-copy', 'working-copy-of'
-                    ]})
-            # RSS only needs one URL. We use the first link for RSS:
-            if len(self.__atom_link) > 0:
-                self.__rss_link = self.__atom_link[-1]['href']
-        # return the set with more information (atom)
-        return self.__atom_link
+        pass
 
     def category(self, category=None, replace=False, **kwargs):
         '''Get or set categories that the feed belongs to.
@@ -626,26 +333,7 @@ class FeedGenerator(object):
         :param replace: Add or replace old data.
         :returns: List of category data.
         '''
-        if category is None and kwargs:
-            category = kwargs
-        if category is not None:
-            if replace or self.__atom_category is None:
-                self.__atom_category = []
-            self.__atom_category += ensure_format(
-                    category,
-                    set(['term', 'scheme', 'label']),
-                    set(['term']))
-            # Map the ATOM categories to RSS categories. Use the atom:label as
-            # name or if not present the atom:term. The atom:scheme is the
-            # rss:domain.
-            self.__rss_category = []
-            for cat in self.__atom_category:
-                rss_cat = {}
-                rss_cat['value'] = cat.get('label', cat['term'])
-                if cat.get('scheme'):
-                    rss_cat['domain'] = cat['scheme']
-                self.__rss_category.append(rss_cat)
-        return self.__atom_category
+        pass
 
     def cloud(self, domain=None, port=None, path=None, registerProcedure=None,
               protocol=None):
@@ -681,14 +369,7 @@ class FeedGenerator(object):
         :param replace: Add or replace old data.
         :returns: List of contributors as dictionaries.
         '''
-        if contributor is None and kwargs:
-            contributor = kwargs
-        if contributor is not None:
-            if replace or self.__atom_contributor is None:
-                self.__atom_contributor = []
-            self.__atom_contributor += ensure_format(
-                    contributor, set(['name', 'email', 'uri']), set(['name']))
-        return self.__atom_contributor
+        pass
 
     def generator(self, generator=None, version=None, uri=None):
         '''Get or set the generator of the feed which identifies the software
@@ -710,9 +391,7 @@ class FeedGenerator(object):
         :param icon: URI of the feeds icon.
         :returns: URI of the feeds icon.
         '''
-        if icon is not None:
-            self.__atom_icon = icon
-        return self.__atom_icon
+        pass
 
     def logo(self, logo=None):
         '''Get or set the logo of the feed which is a larger image which
@@ -723,10 +402,7 @@ class FeedGenerator(object):
         :param logo: Logo of the feed.
         :returns: Logo of the feed.
         '''
-        if logo is not None:
-            self.__atom_logo = logo
-            self.__rss_image = {'url': logo}
-        return self.__atom_logo
+        pass
 
     def image(self, url=None, title=None, link=None, width=None, height=None,
               description=None):
@@ -752,10 +428,7 @@ class FeedGenerator(object):
 
         :param rights: Rights information of the feed.
         '''
-        if rights is not None:
-            self.__atom_rights = rights
-            self.__rss_copyright = rights
-        return self.__atom_rights
+        pass
 
     def copyright(self, copyright=None):
         '''Get or set the copyright notice for content in the channel. This RSS
@@ -774,10 +447,7 @@ class FeedGenerator(object):
         :param subtitle: The subtitle of the feed.
         :returns: The subtitle of the feed.
         '''
-        if subtitle is not None:
-            self.__atom_subtitle = subtitle
-            self.__rss_description = subtitle
-        return self.__atom_subtitle
+        pass
 
     def description(self, description=None):
         '''Set and get the description of the feed. This is an RSS only element
@@ -816,10 +486,7 @@ class FeedGenerator(object):
         :param language: Language of the feed.
         :returns: Language of the feed.
         '''
-        if language is not None:
-            self.__rss_language = language
-            self.__atom_feed_xml_lang = language
-        return self.__rss_language
+        pass
 
     def managingEditor(self, managingEditor=None):
         '''Set or get the value for managingEditor which is the email address
@@ -935,31 +602,7 @@ class FeedGenerator(object):
             >>> entry.title('First feed entry')
 
         '''
-        if feedEntry is None:
-            feedEntry = FeedEntry()
-
-        version = sys.version_info[0]
-
-        if version == 2:
-            items = self.__extensions.iteritems()
-        else:
-            items = self.__extensions.items()
-
-        # Try to load extensions:
-        for extname, ext in items:
-            try:
-                feedEntry.register_extension(extname,
-                                             ext['extension_class_entry'],
-                                             ext['atom'],
-                                             ext['rss'])
-            except ImportError:
-                pass
-
-        if order == 'prepend':
-            self.__feed_entries.insert(0, feedEntry)
-        else:
-            self.__feed_entries.append(feedEntry)
-        return feedEntry
+        pass
 
     def add_item(self, item=None):
         '''This method will add a new item to the feed. If the item argument is
@@ -1006,28 +649,7 @@ class FeedGenerator(object):
         :param rss: If the extension should be used for RSS feeds.
         '''
         # Check loaded extensions
-        if not isinstance(self.__extensions, dict):
-            self.__extensions = {}
-        if name in self.__extensions.keys():
-            raise ImportError('Extension already loaded')
-
-        # Load extension
-        extname = name[0].upper() + name[1:]
-        feedsupmod = __import__('feedgen.ext.%s' % name)
-        feedextmod = getattr(feedsupmod.ext, name)
-        try:
-            entrysupmod = __import__('feedgen.ext.%s_entry' % name)
-            entryextmod = getattr(entrysupmod.ext, name + '_entry')
-        except ImportError:
-            # Use FeedExtension module instead
-            entrysupmod = feedsupmod
-            entryextmod = feedextmod
-        feedext = getattr(feedextmod, extname + 'Extension')
-        try:
-            entryext = getattr(entryextmod, extname + 'EntryExtension')
-        except AttributeError:
-            entryext = None
-        self.register_extension(name, feedext, entryext, atom, rss)
+        pass
 
     def register_extension(self, namespace, extension_class_feed=None,
                            extension_class_entry=None, atom=True, rss=True):
@@ -1041,30 +663,4 @@ class FeedGenerator(object):
         '''
         # Check loaded extensions
         # `load_extension` ignores the "Extension" suffix.
-        if not isinstance(self.__extensions, dict):
-            self.__extensions = {}
-        if namespace in self.__extensions.keys():
-            raise ImportError('Extension already loaded')
-
-        # Load extension
-        extinst = extension_class_feed()
-        setattr(self, namespace, extinst)
-
-        # `load_extension` registry
-        self.__extensions[namespace] = {
-                'inst': extinst,
-                'extension_class_feed': extension_class_feed,
-                'extension_class_entry': extension_class_entry,
-                'atom': atom,
-                'rss': rss
-                }
-
-        # Try to load the extension for already existing entries:
-        for entry in self.__feed_entries:
-            try:
-                entry.register_extension(namespace,
-                                         extension_class_entry,
-                                         atom,
-                                         rss)
-            except ImportError:
-                pass
+        pass

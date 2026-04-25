@@ -22,39 +22,7 @@ from feedgen.util import ensure_format, formatRFC2822, xml_fromstring, xml_elem
 
 def _add_text_elm(entry, data, name):
     """Add a text subelement to an entry"""
-    if not data:
-        return
-
-    elm = xml_elem(name, entry)
-    type_ = data.get('type')
-    if data.get('src'):
-        if name != 'content':
-            raise ValueError("Only the 'content' element of an entry can "
-                             "contain a 'src' attribute")
-        elm.attrib['src'] = data['src']
-    elif data.get(name):
-        # Surround xhtml with a div tag, parse it and embed it
-        if type_ == 'xhtml':
-            xhtml = '<div xmlns="http://www.w3.org/1999/xhtml">' \
-                    + data.get(name) + '</div>'
-            elm.append(xml_fromstring(xhtml))
-        elif type_ == 'CDATA':
-            elm.text = CDATA(data.get(name))
-        # Parse XML and embed it
-        elif type_ and (type_.endswith('/xml') or type_.endswith('+xml')):
-            elm.append(xml_fromstring(data[name]))
-        # Embed the text in escaped form
-        elif not type_ or type_.startswith('text') or type_ == 'html':
-            elm.text = data.get(name)
-        # Everything else should be included base64 encoded
-        else:
-            raise NotImplementedError(
-                'base64 encoded {} is not supported at the moment. '
-                'Pull requests adding support are welcome.'.format(name)
-            )
-    # Add type description of the content
-    if type_:
-        elm.attrib['type'] = type_
+    pass
 
 
 class FeedEntry(object):
@@ -101,164 +69,11 @@ class FeedEntry(object):
 
     def atom_entry(self, extensions=True):
         '''Create an ATOM entry and return it.'''
-        entry = xml_elem('entry')
-        if not (self.__atom_id and self.__atom_title and self.__atom_updated):
-            raise ValueError('Required fields not set')
-        id = xml_elem('id', entry)
-        id.text = self.__atom_id
-        title = xml_elem('title', entry)
-        title.text = self.__atom_title
-        updated = xml_elem('updated', entry)
-        updated.text = self.__atom_updated.isoformat()
-
-        # An entry must contain an alternate link if there is no content
-        # element.
-        if not self.__atom_content:
-            links = self.__atom_link or []
-            if not [link for link in links if link.get('rel') == 'alternate']:
-                raise ValueError('Entry must contain an alternate link or '
-                                 'a content element.')
-
-        # Add author elements
-        for a in self.__atom_author or []:
-            # Atom requires a name. Skip elements without.
-            if not a.get('name'):
-                continue
-            author = xml_elem('author', entry)
-            name = xml_elem('name', author)
-            name.text = a.get('name')
-            if a.get('email'):
-                email = xml_elem('email', author)
-                email.text = a.get('email')
-            if a.get('uri'):
-                uri = xml_elem('uri', author)
-                uri.text = a.get('uri')
-
-        _add_text_elm(entry, self.__atom_content, 'content')
-
-        for link in self.__atom_link or []:
-            link = xml_elem('link', entry, href=link['href'])
-            if link.get('rel'):
-                link.attrib['rel'] = link['rel']
-            if link.get('type'):
-                link.attrib['type'] = link['type']
-            if link.get('hreflang'):
-                link.attrib['hreflang'] = link['hreflang']
-            if link.get('title'):
-                link.attrib['title'] = link['title']
-            if link.get('length'):
-                link.attrib['length'] = link['length']
-
-        _add_text_elm(entry, self.__atom_summary, 'summary')
-
-        for c in self.__atom_category or []:
-            cat = xml_elem('category', entry, term=c['term'])
-            if c.get('scheme'):
-                cat.attrib['scheme'] = c['scheme']
-            if c.get('label'):
-                cat.attrib['label'] = c['label']
-
-        # Add author elements
-        for c in self.__atom_contributor or []:
-            # Atom requires a name. Skip elements without.
-            if not c.get('name'):
-                continue
-            contrib = xml_elem('contributor', entry)
-            name = xml_elem('name', contrib)
-            name.text = c.get('name')
-            if c.get('email'):
-                email = xml_elem('email', contrib)
-                email.text = c.get('email')
-            if c.get('uri'):
-                uri = xml_elem('uri', contrib)
-                uri.text = c.get('uri')
-
-        if self.__atom_published:
-            published = xml_elem('published', entry)
-            published.text = self.__atom_published.isoformat()
-
-        if self.__atom_rights:
-            rights = xml_elem('rights', entry)
-            rights.text = self.__atom_rights
-
-        if self.__atom_source:
-            source = xml_elem('source', entry)
-            if self.__atom_source.get('title'):
-                source_title = xml_elem('title', source)
-                source_title.text = self.__atom_source['title']
-            if self.__atom_source.get('link'):
-                xml_elem('link', source, href=self.__atom_source['link'])
-
-        if extensions:
-            for ext in self.__extensions.values() or []:
-                if ext.get('atom'):
-                    ext['inst'].extend_atom(entry)
-
-        return entry
+        pass
 
     def rss_entry(self, extensions=True):
         '''Create a RSS item and return it.'''
-        entry = xml_elem('item')
-        if not (self.__rss_title or
-                self.__rss_description or
-                self.__rss_content):
-            raise ValueError('Required fields not set')
-        if self.__rss_title:
-            title = xml_elem('title', entry)
-            title.text = self.__rss_title
-        if self.__rss_link:
-            link = xml_elem('link', entry)
-            link.text = self.__rss_link
-        if self.__rss_description and self.__rss_content:
-            description = xml_elem('description', entry)
-            description.text = self.__rss_description
-            XMLNS_CONTENT = 'http://purl.org/rss/1.0/modules/content/'
-            content = xml_elem('{%s}encoded' % XMLNS_CONTENT, entry)
-            content.text = CDATA(self.__rss_content['content']) \
-                if self.__rss_content.get('type', '') == 'CDATA' \
-                else self.__rss_content['content']
-        elif self.__rss_description:
-            description = xml_elem('description', entry)
-            description.text = self.__rss_description
-        elif self.__rss_content:
-            description = xml_elem('description', entry)
-            description.text = CDATA(self.__rss_content['content']) \
-                if self.__rss_content.get('type', '') == 'CDATA' \
-                else self.__rss_content['content']
-        for a in self.__rss_author or []:
-            author = xml_elem('author', entry)
-            author.text = a
-        if self.__rss_guid.get('guid'):
-            guid = xml_elem('guid', entry)
-            guid.text = self.__rss_guid['guid']
-            permaLink = str(self.__rss_guid.get('permalink', False)).lower()
-            guid.attrib['isPermaLink'] = permaLink
-        for cat in self.__rss_category or []:
-            category = xml_elem('category', entry)
-            category.text = cat['value']
-            if cat.get('domain'):
-                category.attrib['domain'] = cat['domain']
-        if self.__rss_comments:
-            comments = xml_elem('comments', entry)
-            comments.text = self.__rss_comments
-        if self.__rss_enclosure:
-            enclosure = xml_elem('enclosure', entry)
-            enclosure.attrib['url'] = self.__rss_enclosure['url']
-            enclosure.attrib['length'] = self.__rss_enclosure['length']
-            enclosure.attrib['type'] = self.__rss_enclosure['type']
-        if self.__rss_pubDate:
-            pubDate = xml_elem('pubDate', entry)
-            pubDate.text = formatRFC2822(self.__rss_pubDate)
-        if self.__rss_source:
-            source = xml_elem('source', entry, url=self.__rss_source['url'])
-            source.text = self.__rss_source['title']
-
-        if extensions:
-            for ext in self.__extensions.values() or []:
-                if ext.get('rss'):
-                    ext['inst'].extend_rss(entry)
-
-        return entry
+        pass
 
     def title(self, title=None):
         '''Get or set the title value of the entry. It should contain a human
@@ -268,10 +83,7 @@ class FeedEntry(object):
         :param title: The new title of the entry.
         :returns: The entriess title.
         '''
-        if title is not None:
-            self.__atom_title = title
-            self.__rss_title = title
-        return self.__atom_title
+        pass
 
     def id(self, id=None):
         '''Get or set the entry id which identifies the entry using a
@@ -339,22 +151,7 @@ class FeedEntry(object):
             [{'name':'John Doe','email':'jdoe@example.com'}]
 
         '''
-        if author is None and kwargs:
-            author = kwargs
-        if author is not None:
-            if replace or self.__atom_author is None:
-                self.__atom_author = []
-            self.__atom_author += ensure_format(author,
-                                                set(['name', 'email', 'uri']),
-                                                set())
-            self.__rss_author = []
-            for a in self.__atom_author:
-                if a.get('email'):
-                    if a.get('name'):
-                        self.__rss_author.append('%(email)s (%(name)s)' % a)
-                    else:
-                        self.__rss_author.append('%(email)s' % a)
-        return self.__atom_author
+        pass
 
     def content(self, content=None, src=None, type=None):
         '''Get or set the content of the entry which contains or links to the
@@ -368,15 +165,7 @@ class FeedEntry(object):
         :param type: If type is CDATA content would not be escaped.
         :returns: Content element of the entry.
         '''
-        if src is not None:
-            self.__atom_content = {'src': src}
-        elif content is not None:
-            self.__atom_content = {'content': content}
-            self.__rss_content = {'content': content}
-            if type is not None:
-                self.__atom_content['type'] = type
-                self.__rss_content['type'] = type
-        return self.__atom_content
+        pass
 
     def link(self, link=None, replace=False, **kwargs):
         '''Get or set link data. An link element is a dict with the fields
@@ -421,27 +210,7 @@ class FeedEntry(object):
         :param replace: Add or replace old data.
         :returns: List of link data.
         '''
-        if link is None and kwargs:
-            link = kwargs
-        if link is not None:
-            if replace or self.__atom_link is None:
-                self.__atom_link = []
-            self.__atom_link += ensure_format(
-                link,
-                set(['href', 'rel', 'type', 'hreflang', 'title', 'length']),
-                set(['href']),
-                {'rel': ['alternate', 'enclosure', 'related', 'self', 'via']},
-                {'rel': 'alternate'})
-            # RSS only needs one URL. We use the first link for RSS:
-            for link in self.__atom_link:
-                if link.get('rel') == 'alternate':
-                    self.__rss_link = link['href']
-                elif link.get('rel') == 'enclosure':
-                    self.__rss_enclosure = {'url': link['href']}
-                    self.__rss_enclosure['type'] = link.get('type')
-                    self.__rss_enclosure['length'] = link.get('length') or '0'
-        # return the set with more information (atom)
-        return self.__atom_link
+        pass
 
     def summary(self, summary=None, type=None):
         '''Get or set the summary element of an entry which conveys a short
@@ -455,19 +224,7 @@ class FeedEntry(object):
         :param summary: Summary of the entries contents.
         :returns: Summary of the entries contents.
         '''
-        if summary is not None:
-            # Replace the RSS description with the summary if it was the
-            # summary before. Not if it is the description.
-            if not self.__rss_description or (
-                self.__atom_summary and
-                self.__rss_description == self.__atom_summary.get("summary")
-            ):
-                self.__rss_description = summary
-
-            self.__atom_summary = {'summary': summary}
-            if type is not None:
-                self.__atom_summary['type'] = type
-        return self.__atom_summary
+        pass
 
     def description(self, description=None, isSummary=False):
         '''Get or set the description value which is the item synopsis.
@@ -502,26 +259,7 @@ class FeedEntry(object):
         :param replace: Add or replace old data.
         :returns: List of category data.
         '''
-        if category is None and kwargs:
-            category = kwargs
-        if category is not None:
-            if replace or self.__atom_category is None:
-                self.__atom_category = []
-            self.__atom_category += ensure_format(
-                    category,
-                    set(['term', 'scheme', 'label']),
-                    set(['term']))
-            # Map the ATOM categories to RSS categories. Use the atom:label as
-            # name or if not present the atom:term. The atom:scheme is the
-            # rss:domain.
-            self.__rss_category = []
-            for cat in self.__atom_category:
-                rss_cat = {}
-                rss_cat['value'] = cat.get('label', cat['term'])
-                if cat.get('scheme'):
-                    rss_cat['domain'] = cat['scheme']
-                self.__rss_category.append(rss_cat)
-        return self.__atom_category
+        pass
 
     def contributor(self, contributor=None, replace=False, **kwargs):
         '''Get or set the contributor data of the feed. This is an ATOM only
@@ -542,14 +280,7 @@ class FeedEntry(object):
         :param replace: Add or replace old data.
         :returns: List of contributors as dictionaries.
         '''
-        if contributor is None and kwargs:
-            contributor = kwargs
-        if contributor is not None:
-            if replace or self.__atom_contributor is None:
-                self.__atom_contributor = []
-            self.__atom_contributor += ensure_format(
-                    contributor, set(['name', 'email', 'uri']), set(['name']))
-        return self.__atom_contributor
+        pass
 
     def published(self, published=None):
         '''Set or get the published value which contains the time of the
@@ -589,9 +320,7 @@ class FeedEntry(object):
         :param rights: Rights information of the feed.
         :returns: Rights information of the feed.
         '''
-        if rights is not None:
-            self.__atom_rights = rights
-        return self.__atom_rights
+        pass
 
     def comments(self, comments=None):
         '''Get or set the value of comments which is the URL of the comments
@@ -648,22 +377,7 @@ class FeedEntry(object):
         :param rss: If the extension should be used for RSS feeds.
         '''
         # Check loaded extensions
-        if not isinstance(self.__extensions, dict):
-            self.__extensions = {}
-        if name in self.__extensions.keys():
-            raise ImportError('Extension already loaded')
-
-        # Load extension
-        extname = name[0].upper() + name[1:] + 'EntryExtension'
-        try:
-            supmod = __import__('feedgen.ext.%s_entry' % name)
-            extmod = getattr(supmod.ext, name + '_entry')
-        except ImportError:
-            # Use FeedExtension module instead
-            supmod = __import__('feedgen.ext.%s' % name)
-            extmod = getattr(supmod.ext, name)
-        ext = getattr(extmod, extname)
-        self.register_extension(name, ext, atom, rss)
+        pass
 
     def register_extension(self, namespace, extension_class_entry=None,
                            atom=True, rss=True):
@@ -676,20 +390,4 @@ class FeedEntry(object):
         '''
         # Check loaded extensions
         # `load_extension` ignores the "Extension" suffix.
-        if not isinstance(self.__extensions, dict):
-            self.__extensions = {}
-        if namespace in self.__extensions.keys():
-            raise ImportError('Extension already loaded')
-        if not extension_class_entry:
-            raise ImportError('No extension class')
-
-        extinst = extension_class_entry()
-        setattr(self, namespace, extinst)
-
-        # `load_extension` registry
-        self.__extensions[namespace] = {
-                'inst': extinst,
-                'extension_class_entry': extension_class_entry,
-                'atom': atom,
-                'rss': rss
-                }
+        pass

@@ -35,73 +35,14 @@ class PodcastExtension(BaseExtension):
         self.__itunes_type = None
 
     def extend_ns(self):
-        return {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd'}
+        pass
 
     def extend_rss(self, rss_feed):
         '''Extend an RSS feed root with set itunes fields.
 
         :returns: The feed root element.
         '''
-        ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd'
-        channel = rss_feed[0]
-
-        if self.__itunes_author:
-            author = xml_elem('{%s}author' % ITUNES_NS, channel)
-            author.text = self.__itunes_author
-
-        if self.__itunes_block is not None:
-            block = xml_elem('{%s}block' % ITUNES_NS, channel)
-            block.text = 'yes' if self.__itunes_block else 'no'
-
-        for c in self.__itunes_category or []:
-            if not c.get('cat'):
-                continue
-            category = channel.find(
-                    '{%s}category[@text="%s"]' % (ITUNES_NS, c.get('cat')))
-            if category is None:
-                category = xml_elem('{%s}category' % ITUNES_NS, channel)
-                category.attrib['text'] = c.get('cat')
-
-            if c.get('sub'):
-                subcategory = xml_elem('{%s}category' % ITUNES_NS, category)
-                subcategory.attrib['text'] = c.get('sub')
-
-        if self.__itunes_image:
-            image = xml_elem('{%s}image' % ITUNES_NS, channel)
-            image.attrib['href'] = self.__itunes_image
-
-        if self.__itunes_explicit in ('yes', 'no', 'clean'):
-            explicit = xml_elem('{%s}explicit' % ITUNES_NS, channel)
-            explicit.text = self.__itunes_explicit
-
-        if self.__itunes_complete in ('yes', 'no'):
-            complete = xml_elem('{%s}complete' % ITUNES_NS, channel)
-            complete.text = self.__itunes_complete
-
-        if self.__itunes_new_feed_url:
-            new_feed_url = xml_elem('{%s}new-feed-url' % ITUNES_NS, channel)
-            new_feed_url.text = self.__itunes_new_feed_url
-
-        if self.__itunes_owner:
-            owner = xml_elem('{%s}owner' % ITUNES_NS, channel)
-            owner_name = xml_elem('{%s}name' % ITUNES_NS, owner)
-            owner_name.text = self.__itunes_owner.get('name')
-            owner_email = xml_elem('{%s}email' % ITUNES_NS, owner)
-            owner_email.text = self.__itunes_owner.get('email')
-
-        if self.__itunes_subtitle:
-            subtitle = xml_elem('{%s}subtitle' % ITUNES_NS, channel)
-            subtitle.text = self.__itunes_subtitle
-
-        if self.__itunes_summary:
-            summary = xml_elem('{%s}summary' % ITUNES_NS, channel)
-            summary.text = self.__itunes_summary
-
-        if self.__itunes_type in ('episodic', 'serial'):
-            type = xml_elem('{%s}type' % ITUNES_NS, channel)
-            type.text = self.__itunes_type
-
-        return rss_feed
+        pass
 
     def itunes_author(self, itunes_author=None):
         '''Get or set the itunes:author. The content of this tag is shown in
@@ -112,9 +53,7 @@ class PodcastExtension(BaseExtension):
         :param itunes_author: The author of the podcast.
         :returns: The author of the podcast.
         '''
-        if itunes_author is not None:
-            self.__itunes_author = itunes_author
-        return self.__itunes_author
+        pass
 
     def itunes_block(self, itunes_block=None):
         '''Get or set the ITunes block attribute. Use this to prevent the
@@ -173,20 +112,7 @@ class PodcastExtension(BaseExtension):
         '''
         # Ensure old API still works for now. Note that the API is deprecated
         # and this fallback may be removed at any time.
-        if isinstance(itunes_category, string_types):
-            itunes_category = {'cat': itunes_category}
-            if replace:
-                itunes_category['sub'] = replace
-            replace = True
-        if itunes_category is None and kwargs:
-            itunes_category = kwargs
-        if itunes_category is not None:
-            if replace or self.__itunes_category is None:
-                self.__itunes_category = []
-            self.__itunes_category += ensure_format(itunes_category,
-                                                    set(['cat', 'sub']),
-                                                    set(['cat']))
-        return self.__itunes_category
+        pass
 
     def itunes_image(self, itunes_image=None):
         '''Get or set the image for the podcast. This tag specifies the artwork
@@ -228,11 +154,7 @@ class PodcastExtension(BaseExtension):
         :param itunes_explicit: If the podcast contains explicit material.
         :returns: If the podcast contains explicit material.
         '''
-        if itunes_explicit is not None:
-            if itunes_explicit not in ('', 'yes', 'no', 'clean'):
-                raise ValueError('Invalid value for explicit tag')
-            self.__itunes_explicit = itunes_explicit
-        return self.__itunes_explicit
+        pass
 
     def itunes_complete(self, itunes_complete=None):
         '''Get or set the itunes:complete value of the podcast. This tag can be
@@ -246,15 +168,7 @@ class PodcastExtension(BaseExtension):
         :param itunes_complete: If the podcast is complete.
         :returns: If the podcast is complete.
         '''
-        if itunes_complete is not None:
-            if itunes_complete not in ('yes', 'no', '', True, False):
-                raise ValueError('Invalid value for complete tag')
-            if itunes_complete is True:
-                itunes_complete = 'yes'
-            if itunes_complete is False:
-                itunes_complete = 'no'
-            self.__itunes_complete = itunes_complete
-        return self.__itunes_complete
+        pass
 
     def itunes_new_feed_url(self, itunes_new_feed_url=None):
         '''Get or set the new-feed-url property of the podcast. This tag allows
@@ -267,9 +181,7 @@ class PodcastExtension(BaseExtension):
         :param itunes_new_feed_url: New feed URL.
         :returns: New feed URL.
         '''
-        if itunes_new_feed_url is not None:
-            self.__itunes_new_feed_url = itunes_new_feed_url
-        return self.__itunes_new_feed_url
+        pass
 
     def itunes_owner(self, name=None, email=None):
         '''Get or set the itunes:owner of the podcast. This tag contains
@@ -280,14 +192,7 @@ class PodcastExtension(BaseExtension):
         :param itunes_owner: The owner of the feed.
         :returns: Data of the owner of the feed.
         '''
-        if name is not None:
-            if name and email:
-                self.__itunes_owner = {'name': name, 'email': email}
-            elif not name and not email:
-                self.__itunes_owner = None
-            else:
-                raise ValueError('Both name and email have to be set.')
-        return self.__itunes_owner
+        pass
 
     def itunes_subtitle(self, itunes_subtitle=None):
         '''Get or set the itunes:subtitle value for the podcast. The contents
@@ -310,9 +215,7 @@ class PodcastExtension(BaseExtension):
         :param itunes_summary: Summary of the podcast.
         :returns: Summary of the podcast.
         '''
-        if itunes_summary is not None:
-            self.__itunes_summary = itunes_summary
-        return self.__itunes_summary
+        pass
 
     def itunes_type(self, itunes_type=None):
         '''Get or set the itunes:type value of the podcast. This tag should
@@ -336,11 +239,7 @@ class PodcastExtension(BaseExtension):
         :param itunes_type: The type of the podcast
         :returns: type of the pdocast.
         '''
-        if itunes_type is not None:
-            if itunes_type not in ('episodic', 'serial'):
-                raise ValueError('Invalid value for type tag')
-            self.__itunes_type = itunes_type
-        return self.__itunes_type
+        pass
 
     _itunes_categories = {
             'Arts': [

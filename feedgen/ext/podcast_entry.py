@@ -40,64 +40,7 @@ class PodcastEntryExtension(BaseEntryExtension):
 
         :param feed: The RSS item XML element to use.
         '''
-        ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd'
-
-        if self.__itunes_author:
-            author = xml_elem('{%s}author' % ITUNES_NS, entry)
-            author.text = self.__itunes_author
-
-        if self.__itunes_block is not None:
-            block = xml_elem('{%s}block' % ITUNES_NS, entry)
-            block.text = 'yes' if self.__itunes_block else 'no'
-
-        if self.__itunes_image:
-            image = xml_elem('{%s}image' % ITUNES_NS, entry)
-            image.attrib['href'] = self.__itunes_image
-
-        if self.__itunes_duration:
-            duration = xml_elem('{%s}duration' % ITUNES_NS, entry)
-            duration.text = self.__itunes_duration
-
-        if self.__itunes_explicit in ('yes', 'no', 'clean'):
-            explicit = xml_elem('{%s}explicit' % ITUNES_NS, entry)
-            explicit.text = self.__itunes_explicit
-
-        if self.__itunes_is_closed_captioned is not None:
-            is_closed_captioned = xml_elem(
-                    '{%s}isClosedCaptioned' % ITUNES_NS, entry)
-            if self.__itunes_is_closed_captioned:
-                is_closed_captioned.text = 'yes'
-            else:
-                is_closed_captioned.text = 'no'
-
-        if self.__itunes_order is not None and self.__itunes_order >= 0:
-            order = xml_elem('{%s}order' % ITUNES_NS, entry)
-            order.text = str(self.__itunes_order)
-
-        if self.__itunes_subtitle:
-            subtitle = xml_elem('{%s}subtitle' % ITUNES_NS, entry)
-            subtitle.text = self.__itunes_subtitle
-
-        if self.__itunes_summary:
-            summary = xml_elem('{%s}summary' % ITUNES_NS, entry)
-            summary.text = self.__itunes_summary
-
-        if self.__itunes_season:
-            season = xml_elem('{%s}season' % ITUNES_NS, entry)
-            season.text = str(self.__itunes_season)
-
-        if self.__itunes_episode:
-            episode = xml_elem('{%s}episode' % ITUNES_NS, entry)
-            episode.text = str(self.__itunes_episode)
-
-        if self.__itunes_title:
-            title = xml_elem('{%s}title' % ITUNES_NS, entry)
-            title.text = self.__itunes_title
-
-        if self.__itunes_episode_type in ('full', 'trailer', 'bonus'):
-            episode_type = xml_elem('{%s}episodeType' % ITUNES_NS, entry)
-            episode_type.text = self.__itunes_episode_type
-        return entry
+        pass
 
     def itunes_author(self, itunes_author=None):
         '''Get or set the itunes:author of the podcast episode. The content of
@@ -109,9 +52,7 @@ class PodcastEntryExtension(BaseEntryExtension):
         :param itunes_author: The author of the podcast.
         :returns: The author of the podcast.
         '''
-        if itunes_author is not None:
-            self.__itunes_author = itunes_author
-        return self.__itunes_author
+        pass
 
     def itunes_block(self, itunes_block=None):
         '''Get or set the ITunes block attribute. Use this to prevent episodes
@@ -181,11 +122,7 @@ class PodcastEntryExtension(BaseEntryExtension):
                                 material.
         :returns: If the podcast episode contains explicit material.
         '''
-        if itunes_explicit is not None:
-            if itunes_explicit not in ('', 'yes', 'no', 'clean'):
-                raise ValueError('Invalid value for explicit tag')
-            self.__itunes_explicit = itunes_explicit
-        return self.__itunes_explicit
+        pass
 
     def itunes_is_closed_captioned(self, itunes_is_closed_captioned=None):
         '''Get or set the is_closed_captioned value of the podcast episode.
@@ -239,9 +176,7 @@ class PodcastEntryExtension(BaseEntryExtension):
         :param itunes_summary: Summary of the podcast episode.
         :returns: Summary of the podcast episode.
         '''
-        if itunes_summary is not None:
-            self.__itunes_summary = itunes_summary
-        return self.__itunes_summary
+        pass
 
     def itunes_season(self, itunes_season=None):
         '''Get or set the itunes:season value for the podcast episode.
@@ -249,9 +184,7 @@ class PodcastEntryExtension(BaseEntryExtension):
         :param itunes_season: Season number of the podcast epiosode.
         :returns: Season number of the podcast episode.
         '''
-        if itunes_season is not None:
-            self.__itunes_season = int(itunes_season)
-        return self.__itunes_season
+        pass
 
     def itunes_episode(self, itunes_episode=None):
         '''Get or set the itunes:episode value for the podcast episode.
@@ -259,9 +192,7 @@ class PodcastEntryExtension(BaseEntryExtension):
         :param itunes_season: Episode number of the podcast epiosode.
         :returns: Episode number of the podcast episode.
         '''
-        if itunes_episode is not None:
-            self.__itunes_episode = int(itunes_episode)
-        return self.__itunes_episode
+        pass
 
     def itunes_title(self, itunes_title=None):
         '''Get or set the itunes:title value for the podcast episode.
@@ -273,9 +204,7 @@ class PodcastEntryExtension(BaseEntryExtension):
         :param itunes_title: Episode title specific for Apple Podcasts
         :returns: Title specific for Apple Podcast
         '''
-        if itunes_title is not None:
-            self.__itunes_title = itunes_title
-        return self.__itunes_title
+        pass
 
     def itunes_episode_type(self, itunes_episode_type=None):
         '''Get or set the itunes:episodeType value of the item. This tag should
@@ -294,8 +223,4 @@ class PodcastEntryExtension(BaseEntryExtension):
         :param itunes_episode_type: The episode type
         :returns: type of the episode.
         '''
-        if itunes_episode_type is not None:
-            if itunes_episode_type not in ('full', 'trailer', 'bonus'):
-                raise ValueError('Invalid value for episodeType tag')
-            self.__itunes_episode_type = itunes_episode_type
-        return self.__itunes_episode_type
+        pass

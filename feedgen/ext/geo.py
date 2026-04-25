@@ -18,4 +18,4 @@ class GeoExtension(BaseExtension):
     '''
 
     def extend_ns(self):
-        return {'georss': 'http://www.georss.org/georss'}
+        pass

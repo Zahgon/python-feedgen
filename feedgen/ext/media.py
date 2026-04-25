@@ -21,7 +21,7 @@ class MediaExtension(BaseExtension):
     '''
 
     def extend_ns(self):
-        return {'media': MEDIA_NS}
+        pass
 
 
 class MediaEntryExtension(BaseEntryExtension):
@@ -38,37 +38,10 @@ class MediaEntryExtension(BaseEntryExtension):
         :param feed: The RSS item XML element to use.
         '''
 
-        groups = {None: entry}
-        for media_content in self.__media_content:
-            # Define current media:group
-            group = groups.get(media_content.get('group'))
-            if group is None:
-                group = xml_elem('{%s}group' % MEDIA_NS, entry)
-                groups[media_content.get('group')] = group
-            # Add content
-            content = xml_elem('{%s}content' % MEDIA_NS, group)
-            for attr in ('url', 'fileSize', 'type', 'medium', 'isDefault',
-                         'expression', 'bitrate', 'framerate', 'samplingrate',
-                         'channels', 'duration', 'height', 'width', 'lang'):
-                if media_content.get(attr):
-                    content.set(attr, media_content[attr])
-
-        for media_thumbnail in self.__media_thumbnail:
-            # Define current media:group
-            group = groups.get(media_thumbnail.get('group'))
-            if group is None:
-                group = xml_elem('{%s}group' % MEDIA_NS, entry)
-                groups[media_thumbnail.get('group')] = group
-            # Add thumbnails
-            thumbnail = xml_elem('{%s}thumbnail' % MEDIA_NS, group)
-            for attr in ('url', 'height', 'width', 'time'):
-                if media_thumbnail.get(attr):
-                    thumbnail.set(attr, media_thumbnail[attr])
-
-        return entry
+        pass
 
     def extend_rss(self, item):
-        return self.extend_atom(item)
+        pass
 
     def content(self, content=None, replace=False, group='default', **kwargs):
         '''Get or set media:content data.
@@ -112,27 +85,7 @@ class MediaEntryExtension(BaseEntryExtension):
         :returns: The media content tag.
         '''
         # Handle kwargs
-        if content is None and kwargs:
-            content = kwargs
-        # Handle new data
-        if content is not None:
-            # Reset data if we want to replace them
-            if replace or self.__media_content is None:
-                self.__media_content = []
-            # Ensure list
-            if not isinstance(content, list):
-                content = [content]
-            # define media group
-            for c in content:
-                c['group'] = c.get('group', group)
-            self.__media_content += ensure_format(
-                    content,
-                    set(['url', 'fileSize', 'type', 'medium', 'isDefault',
-                         'expression', 'bitrate', 'framerate', 'samplingrate',
-                         'channels', 'duration', 'height', 'width', 'lang',
-                         'group']),
-                    set(['url', 'group']))
-        return self.__media_content
+        pass
 
     def thumbnail(self, thumbnail=None, replace=False, group='default',
                   **kwargs):

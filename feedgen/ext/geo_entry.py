@@ -25,8 +25,7 @@ class GeoRSSPolygonInteriorWarning(Warning):
     """
 
     def __init__(self, geom, *args, **kwargs):
-        self.geom = geom
-        super(GeoRSSPolygonInteriorWarning, self).__init__(*args, **kwargs)
+        pass
 
     def __str__(self):
         return '{:d} interiors of polygon ignored'.format(
@@ -43,8 +42,7 @@ class GeoRSSGeometryError(ValueError):
     """
 
     def __init__(self, geom, *args, **kwargs):
-        self.geom = geom
-        super(GeoRSSGeometryError, self).__init__(*args, **kwargs)
+        pass
 
     def __str__(self):
         msg = "Geometry of type '{}' not in Point, Linestring or Polygon"
@@ -83,55 +81,13 @@ class GeoEntryExtension(BaseEntryExtension):
         :param feed: The RSS item XML element to use.
         '''
 
-        GEO_NS = 'http://www.georss.org/georss'
-
-        if self.__point:
-            point = xml_elem('{%s}point' % GEO_NS, entry)
-            point.text = self.__point
-
-        if self.__line:
-            line = xml_elem('{%s}line' % GEO_NS, entry)
-            line.text = self.__line
-
-        if self.__polygon:
-            polygon = xml_elem('{%s}polygon' % GEO_NS, entry)
-            polygon.text = self.__polygon
-
-        if self.__box:
-            box = xml_elem('{%s}box' % GEO_NS, entry)
-            box.text = self.__box
-
-        if self.__featuretypetag:
-            featuretypetag = xml_elem('{%s}featuretypetag' % GEO_NS, entry)
-            featuretypetag.text = self.__featuretypetag
-
-        if self.__relationshiptag:
-            relationshiptag = xml_elem('{%s}relationshiptag' % GEO_NS, entry)
-            relationshiptag.text = self.__relationshiptag
-
-        if self.__featurename:
-            featurename = xml_elem('{%s}featurename' % GEO_NS, entry)
-            featurename.text = self.__featurename
-
-        if self.__elev:
-            elevation = xml_elem('{%s}elev' % GEO_NS, entry)
-            elevation.text = str(self.__elev)
-
-        if self.__floor:
-            floor = xml_elem('{%s}floor' % GEO_NS, entry)
-            floor.text = str(self.__floor)
-
-        if self.__radius:
-            radius = xml_elem('{%s}radius' % GEO_NS, entry)
-            radius.text = str(self.__radius)
-
-        return entry
+        pass
 
     def extend_rss(self, entry):
-        return self.extend_file(entry)
+        pass
 
     def extend_atom(self, entry):
-        return self.extend_file(entry)
+        pass
 
     def point(self, point=None):
         '''Get or set the georss:point of the entry.

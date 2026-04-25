@@ -25,13 +25,11 @@ parser = lxml.etree.XMLParser(
 
 
 def xml_fromstring(xmlstring):
-    return lxml.etree.fromstring(xmlstring, parser)  # nosec - safe parser
+    pass
 
 
 def xml_elem(name, parent=None, **kwargs):
-    if parent is not None:
-        return lxml.etree.SubElement(parent, name, **kwargs)
-    return lxml.etree.Element(name, **kwargs)
+    pass
 
 
 def ensure_format(val, allowed, required, allowed_values=None, defaults=None):
@@ -47,50 +45,10 @@ def ensure_format(val, allowed, required, allowed_values=None, defaults=None):
     :param defaults:       Dictionary with default values.
     :returns:              List of checked dictionaries.
     '''
-    if not val:
-        return []
-    if allowed_values is None:
-        allowed_values = {}
-    if defaults is None:
-        defaults = {}
-    # Make sure that we have a list of dicts. Even if there is only one.
-    if not isinstance(val, list):
-        val = [val]
-    for elem in val:
-        if not isinstance(elem, dict):
-            raise ValueError('Invalid data (value is no dictionary)')
-        # Set default values
-
-        version = sys.version_info[0]
-
-        if version == 2:
-            items = defaults.iteritems()
-        else:
-            items = defaults.items()
-
-        for k, v in items:
-            elem[k] = elem.get(k, v)
-        if not set(elem.keys()) <= allowed:
-            raise ValueError('Data contains invalid keys')
-        if not set(elem.keys()) >= required:
-            raise ValueError('Data contains not all required keys')
-
-        if version == 2:
-            values = allowed_values.iteritems()
-        else:
-            values = allowed_values.items()
-
-        for k, v in values:
-            if elem.get(k) and not elem[k] in v:
-                raise ValueError('Invalid value for %s' % k)
-    return val
+    pass
 
 
 def formatRFC2822(date):
     '''Make sure the locale setting do not interfere with the time format.
     '''
-    old = locale.setlocale(locale.LC_ALL)
-    locale.setlocale(locale.LC_ALL, 'C')
-    date = date.strftime('%a, %d %b %Y %H:%M:%S %z')
-    locale.setlocale(locale.LC_ALL, old)
-    return date
+    pass
